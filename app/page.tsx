@@ -60,6 +60,21 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ answer: transcript }),
       });
+      const speakFeedback = (data: any) => {
+    if (!("speechSynthesis" in window)) {
+      console.error("Text-to-speech not supported in this browser.");
+      return;
+    }
+
+    const text = `Your score is ${data.score} out of 10. Strengths: ${data.strengths}. Improvements: ${data.improvements}`;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
       const data = await res.json();
       setFeedback(data);
       speakFeedback(data);
