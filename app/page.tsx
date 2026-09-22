@@ -62,12 +62,29 @@ export default function Home() {
       });
       const data = await res.json();
       setFeedback(data);
+      speakFeedback(data);
     } catch (err) {
       console.error("Error fetching feedback:", err);
       alert("Feedback nahi mil paya. Try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const speakFeedback = (data: any) => {
+    if (!("speechSynthesis" in window)) {
+      console.error("Text-to-speech not supported in this browser.");
+      return;
+    }
+
+    const text = `Your score is ${data.score} out of 10. Strengths: ${data.strengths}. Improvements: ${data.improvements}`;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
   };
 
   return (
