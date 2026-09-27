@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-/* import */
 import { useState, useRef } from "react";
 
 export default function Home() {
